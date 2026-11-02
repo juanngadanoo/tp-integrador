@@ -1,0 +1,11 @@
+# Dependencias directas del TP, con versión fija (Clase 2: entorno reproducible).
+# Se agregan a medida que avanzan las clases (FastAPI, LangGraph, Streamlit...).
+google-genai==2.31.0
+pydantic==2.14.1
+python-dotenv==1.2.4
+numpy==2.5.4
+chromadb==1.5.9
+
+# Desarrollo
+pytest==9.1.1
+ipykernel==7.4.0

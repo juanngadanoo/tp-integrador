@@ -1,0 +1,15 @@
+# Credenciales
+.env
+
+# Entorno
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Datos generados (se reconstruyen con scripts/ingestar.py)
+data/chroma/
+
+# Notebooks
+.ipynb_checkpoints/
