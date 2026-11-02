@@ -8,11 +8,12 @@ import pytest
 
 
 class FakeAPIError(Exception):
-    """Imita un error del SDK de Google: tiene `status_code`."""
+    """Imita `google.genai.errors.APIError`: el código HTTP está en el atributo `code`
+    (igual que en el SDK real; NO es `status_code`)."""
 
     def __init__(self, status_code: int, mensaje: str = "error falso"):
         super().__init__(f"{status_code} {mensaje}")
-        self.status_code = status_code
+        self.code = status_code
 
 
 class _FakeResp:
