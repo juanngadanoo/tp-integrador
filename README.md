@@ -47,7 +47,7 @@ docs/decisiones.md          registro de decisiones técnicas -> base del informe
 |---|---|---|
 | 1 | Matriz de selección de modelos | ⬜ completar en `docs/decisiones.md` |
 | 2 | `LLMClient` con reintentos | ✅ hecho en notebook |
-| 3 | `LLMProvider` + salida estructurada | ⬜ `pytest tests/test_cp3_*` |
+| 3 | `LLMProvider` + salida estructurada | ✅ `pytest tests/test_cp3_*` |
 | 4 | Ingesta: limpieza, chunking, metadata | ⬜ `pytest tests/test_cp4_ingesta.py` |
 | 5 | Índice vectorial + buscador | ⬜ `pytest tests/test_cp5_buscador.py` |
 | 6 | RAG end-to-end con citas | — |
