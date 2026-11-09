@@ -2,6 +2,7 @@
 
 import hashlib
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 
 
 def chunking_por_caracteres(texto: str, tamano: int = 300, solapamiento: int = 50) -> list[str]:
@@ -40,11 +41,11 @@ class Chunk:
     texto: str
     documento_id: str
     posicion: int
-    # TODO (vos, practicá Clase 4 sección 6): agregá
-    #   - fuente: str            (nombre de archivo o URL; lo vas a mostrar en las citas de la Clase 6)
-    #   - fecha_ingesta: str     (timestamp ISO, con default_factory)
+    fuente: str
+    fecha_ingesta: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     chunk_id: str = field(init=False)
 
     def __post_init__(self):
         hash_contenido = hashlib.sha256(self.texto.encode()).hexdigest()[:8]
         self.chunk_id = f"{self.documento_id}-{self.posicion:03d}-{hash_contenido}"
+

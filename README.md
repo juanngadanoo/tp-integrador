@@ -7,7 +7,7 @@ Proveedor: **Google Gemini** (generación + embeddings).
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # Windows  (Linux/Mac: source .venv/bin/activate)
+.venv\Scripts\activate          # Windows 
 pip install -r requirements.txt
 pip install -e .                # registra el paquete `tp` para poder importarlo desde scripts y notebooks
 copy .env.example .env          # y completá GOOGLE_API_KEY
@@ -48,7 +48,7 @@ docs/decisiones.md          registro de decisiones técnicas -> base del informe
 | 1 | Matriz de selección de modelos | ⬜ completar en `docs/decisiones.md` |
 | 2 | `LLMClient` con reintentos | ✅ hecho en notebook |
 | 3 | `LLMProvider` + salida estructurada | ✅ `pytest tests/test_cp3_*` |
-| 4 | Ingesta: limpieza, chunking, metadata | ⬜ `pytest tests/test_cp4_ingesta.py` |
+| 4 | Ingesta: limpieza, chunking, metadata | ✅ `pytest tests/test_cp4_ingesta.py` |
 | 5 | Índice vectorial + buscador | ⬜ `pytest tests/test_cp5_buscador.py` |
 | 6 | RAG end-to-end con citas | — |
 | 7 | Casos fallidos diagnosticados | — |

@@ -1,16 +1,8 @@
 # Registro de decisiones técnicas
 
-Cada vez que elegís algo (modelo, tamaño de chunk, umbral, framework), anotalo acá con el **porqué**.
-En la Clase 12 esto se convierte casi directo en la sección "Decisiones técnicas" del informe,
-y es lo que te van a preguntar en la exposición.
-
-Formato: fecha · decisión · alternativas consideradas · por qué · cómo lo medí (si aplica).
-
----
-
 ## Clase 1 — Matriz de selección de modelos
 
-TODO (vos): completar la plantilla de `clase-01-fundamentos-llms/actividad.md` y responder las 3 preguntas guía.
+TODO: completar la plantilla de `clase-01-fundamentos-llms/actividad.md` y responder las 3 preguntas guía.
 En la columna de Gemini, justificá por qué lo usás para generación Y embeddings.
 
 ## 2026-10-20 · Modelo de embeddings: `gemini-embedding-001` a 768 dimensiones
@@ -21,8 +13,13 @@ En la columna de Gemini, justificá por qué lo usás para generación Y embeddi
 
 ## Clase 4 — Estrategia de chunking
 
-TODO (vos), cuando tengas el corpus: tamaño, overlap, por caracteres o por párrafos, y por qué para ESTE corpus.
+- **Limpieza (MDN)**: se borran la ficha técnica (salvo `title:`), los botones de navegación y las marcas del sitio web; los links `{{jsxref(...)}}` se reemplazan por su texto visible. Por qué: lo que se repite en todas las páginas hace que los chunks se parezcan entre sí.
+- **Chunking**: por caracteres, 800 con solapamiento 120 (15%). Alternativa: por párrafos (máx. 800 o 1200).
+- **Por qué**: el corpus tiene bloques de código de hasta 10.400 caracteres; por párrafos, 24 chunks pasarían de 1500. 800 alcanza para una explicación + su ejemplo de código.
+- **Cómo lo medí**: cantidad y tamaño de chunks sobre el corpus real (1118 chunks). Pendiente validar con búsquedas en la Clase 8.
 
 ## Clase 5 — Umbral de similitud
 
-TODO (vos): qué valor elegiste y cómo lo calibraste (qué similitud dan las consultas buenas y cuál las de fuera de dominio).
+Con el resultado arrojado en la celda 11 (propia) de la clase 04 , tomé la decisión de que el umbral de similitud debe parametrizarse por encima de 0.56, dado que con mi proveedor (google) un umbral de 0.5 dejaría pasar cualquier cosa.
+
+Valor provisorio: hay que recalibrarlo en la Clase 5 con la configuración real del TP (768 dimensiones y task_type)
