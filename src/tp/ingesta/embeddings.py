@@ -13,7 +13,12 @@ Preguntas que te pueden hacer en la defensa sobre este archivo:
   ¿Qué pasa si cambiás EMBEDDING_DIM con el índice ya construido?
 """
 
+import random
+import time
+
 import numpy as np
+
+from tp.llm.google import CODIGOS_REINTENTABLES
 
 from tp.config import settings
 
@@ -36,6 +41,19 @@ def _normalizar(vector: list[float]) -> list[float]:
     return (v / norma).tolist() if norma else v.tolist()
 
 
+def _embeber_lote(client, lote: list[str], config, max_reintentos: int = 3):
+    """Manda una tanda a Google. Si Google está saturado (429) o falla de su lado (5xx), espera y reintenta."""
+    for intento in range(max_reintentos):
+        try:
+            return client.models.embed_content(model=settings.google_embedding_model_id,
+                                               contents=lote, config=config)
+        except Exception as err:
+            codigo = getattr(err, "code", None)
+            if codigo not in CODIGOS_REINTENTABLES or intento == max_reintentos - 1:
+                raise
+            time.sleep((2 ** intento) + random.uniform(0, 1))
+
+
 def embed_google(textos: list[str], task_type: str = "RETRIEVAL_DOCUMENT") -> list[list[float]]:
     """Devuelve un vector normalizado por cada texto, en el mismo orden."""
     from google.genai import types
@@ -48,8 +66,7 @@ def embed_google(textos: list[str], task_type: str = "RETRIEVAL_DOCUMENT") -> li
     vectores: list[list[float]] = []
     for i in range(0, len(textos), TAMANO_LOTE):
         lote = textos[i:i + TAMANO_LOTE]
-        resp = client.models.embed_content(model=settings.google_embedding_model_id,
-                                           contents=lote, config=config)
+        resp = _embeber_lote(client, lote, config)
         vectores.extend(_normalizar(e.values) for e in resp.embeddings)
     return vectores
 

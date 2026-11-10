@@ -2,13 +2,17 @@
 
 ## Clase 1 — Matriz de selección de modelos
 
-TODO: completar la plantilla de `clase-01-fundamentos-llms/actividad.md` y responder las 3 preguntas guía.
-En la columna de Gemini, justificá por qué lo usás para generación Y embeddings.
+- **Elección**: Gemini para las dos cosas: `gemini-3.5-flash-lite` (generación) y `gemini-embedding-001` (embeddings).
+- **Alternativa evaluada**: Llama 3.2 3B vía Ollama (modelo abierto, corre en la propia PC).
+- **Por qué**: rápido (~1 s medido), barato (línea Flash-lite) y con salida estructurada, tool calling y streaming. Un solo proveedor y una sola API key para todo.
+- **Cuándo cambiaría**: si el corpus fuera confidencial, a un modelo abierto en servidores propios (los datos no salen de la organización).
+- **Detalle**: matriz completa y preguntas guía en `notebooks_clases/actividad.md`.
+
 
 ## 2026-10-20 · Modelo de embeddings: `gemini-embedding-001` a 768 dimensiones
 
 - **Alternativas**: `text-embedding-004` (el que trae el notebook de la cátedra) y `gemini-embedding-2` (multimodal).
-- **Por qué**: TODO (vos). Pista: qué soporta cada uno de `task_type`; qué necesitamos (solo texto o también imágenes); qué cambia en costo y almacenamiento con 768 vs. 3072 dimensiones.
+- **Por qué**: el corpus es solo texto, así que no hace falta un modelo multimodal como `gemini-embedding-2`. Frente a `text-embedding-004`, es un modelo más nuevo y permite elegir la dimensión (768, 1536 o 3072). Con 768 el índice ocupa 4 veces menos que con 3072 y la búsqueda es más rápida, con poca pérdida de calidad. La dimensión no cambia lo que cobra Google (se paga por el texto enviado), sí el espacio que ocupa el índice.
 - **Consecuencia**: con menos de 3072 dimensiones, `gemini-embedding-001` devuelve vectores sin normalizar. Por eso se normalizan en `embeddings.py`.
 
 ## Clase 4 — Estrategia de chunking

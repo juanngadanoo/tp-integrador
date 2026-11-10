@@ -16,6 +16,7 @@ copy .env.example .env          # y completá GOOGLE_API_KEY
 ## Uso
 
 ```bash
+python scripts/descargar_corpus.py          # baja el corpus de MDN (una sola vez)
 pytest -v                                   # tests de todos los checkpoints
 python scripts/ingestar.py                  # corpus -> índice vectorial
 python scripts/buscar.py "tu pregunta"      # prueba manual del buscador
@@ -26,18 +27,18 @@ python scripts/buscar.py "tu pregunta"      # prueba manual del buscador
 ```
 src/tp/
   config.py                 configuración central (lee el .env)
-  llm/base.py               LLMProvider + reintento estructurado (código de cátedra)
-  llm/google.py             GoogleProvider                         [CP3 — TODO]
+  llm/base.py               LLMProvider + reintento estructurado
+  llm/google.py             GoogleProvider                         [CP3 ✅]
   llm/factory.py            get_provider()
-  clasificador.py           IntencionConsulta + clasificar()       [CP3 — TODO]
-  ingesta/limpieza.py       limpiar_texto                          [CP4 — TODO menor]
-  ingesta/chunking.py       chunking + dataclass Chunk             [CP4 — TODO menor]
+  clasificador.py           IntencionConsulta + clasificar()       [CP3 ✅]
+  ingesta/limpieza.py       limpiar_texto                          [CP4 ✅]
+  ingesta/chunking.py       chunking + dataclass Chunk             [CP4 ✅]
   ingesta/embeddings.py     embeddings Gemini (documento/consulta)
-  ingesta/pipeline.py       cargar_corpus + pipeline_ingesta       [CP4 — TODO]
+  ingesta/pipeline.py       cargar_corpus + pipeline_ingesta       [CP4 ✅]
   recuperacion/buscador.py  Chroma: indexar + buscar               [CP5 — TODO]
-scripts/                    ingestar.py, buscar.py
+scripts/                    descargar_corpus.py, ingestar.py, buscar.py
 tests/                      un archivo por checkpoint
-data/corpus/                corpus de la cátedra (no versionar si es pesado)
+data/corpus/                corpus: JavaScript Guide de MDN (34 páginas)
 docs/decisiones.md          registro de decisiones técnicas -> base del informe final
 ```
 
@@ -45,7 +46,7 @@ docs/decisiones.md          registro de decisiones técnicas -> base del informe
 
 | Clase | Checkpoint | Estado |
 |---|---|---|
-| 1 | Matriz de selección de modelos | ⬜ completar en `docs/decisiones.md` |
+| 1 | Matriz de selección de modelos | ✅ `notebooks_clases/actividad.md` + resumen en `docs/decisiones.md` |
 | 2 | `LLMClient` con reintentos | ✅ hecho en notebook |
 | 3 | `LLMProvider` + salida estructurada | ✅ `pytest tests/test_cp3_*` |
 | 4 | Ingesta: limpieza, chunking, metadata | ✅ `pytest tests/test_cp4_ingesta.py` |

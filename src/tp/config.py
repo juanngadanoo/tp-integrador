@@ -22,7 +22,7 @@ class Settings:
 
     # Google (Gemini)
     google_api_key: str | None = os.environ.get("GOOGLE_API_KEY")
-    google_model_id: str = os.environ.get("GOOGLE_MODEL_ID", "gemini-3.8-flash")
+    google_model_id: str = os.environ.get("GOOGLE_MODEL_ID", "gemini-3.5-flash-lite")
     google_embedding_model_id: str = os.environ.get("GOOGLE_EMBEDDING_MODEL_ID", "gemini-embedding-001")
     # Dimensión del embedding. Si cambia, hay que re-ingestar todo el corpus.
     embedding_dim: int = int(os.environ.get("EMBEDDING_DIM", "768"))

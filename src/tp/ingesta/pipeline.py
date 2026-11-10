@@ -41,7 +41,7 @@ def pipeline_ingesta(documentos: dict[str, tuple[str, str]], embed_fn=embed_docu
         for posicion, texto in enumerate(textos):
             todos_los_chunks.append(Chunk(texto=texto, documento_id=documento_id, posicion=posicion, fuente=fuente))
 
-    # 2. Embeber TODOS los textos en una sola llamada (batch)
+    # 2. Embeber TODOS los textos (embed_fn los manda a Google en tandas de 50)
     vectores = embed_fn([c.texto for c in todos_los_chunks])
 
     # 3. Emparejar cada ficha con su vector
