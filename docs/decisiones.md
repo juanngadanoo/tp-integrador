@@ -24,6 +24,14 @@
 
 ## Clase 5 — Umbral de similitud
 
-Con el resultado arrojado en la celda 11 (propia) de la clase 04 , tomé la decisión de que el umbral de similitud debe parametrizarse por encima de 0.56, dado que con mi proveedor (google) un umbral de 0.5 dejaría pasar cualquier cosa.
+- **Valor elegido**: 0.6 (reemplaza el provisorio de 0.56).
+- **Cómo lo medí**: 4 preguntas reales sobre el corpus de MDN y 2 fuera de dominio, con el índice real (768 dimensiones, `RETRIEVAL_QUERY`). Peor resultado bueno: 0.726; mejor fuera de dominio: 0.516.
+- **Por qué no 0.3 (ejemplo de la notebook)**: con Gemini, hasta los textos sin relación dan alrededor de 0.5; 0.3 no filtraría nada.
+- **Riesgo**: el puntaje cambia con la redacción de la pregunta; si se cortan respuestas válidas, bajarlo. Revalidar en la Clase 8.
 
-Valor provisorio: hay que recalibrarlo en la Clase 5 con la configuración real del TP (768 dimensiones y task_type)
+## Clase 5 — Ingesta incremental por documento
+
+- **Problema**: el plan gratuito de Gemini permite 100 embeddings por minuto y 1000 por día; el corpus tiene 1118 chunks.
+- **Solución**: `ingestar.py` guarda en Chroma después de cada documento y saltea los ya indexados; ante un 429 se espera un minuto.
+- **Consecuencia**: con el plan gratuito, la primera ingesta lleva dos días; si cambia el corpus o el chunking, hay que borrar `data/chroma` y re-ingestar.
+- **Resolución**: con una API key de nivel 2 (tier pago) la ingesta completa entró en una sola corrida; la ingesta incremental queda como protección ante cortes.

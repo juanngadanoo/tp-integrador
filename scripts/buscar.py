@@ -14,7 +14,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("consulta")
     parser.add_argument("-k", type=int, default=3)
-    parser.add_argument("--umbral", type=float, default=0.0)
+    parser.add_argument("--umbral", type=float, default=0.6)
     args = parser.parse_args()
 
     resultados = buscar(args.consulta, abrir_coleccion(), k=args.k, umbral_similitud=args.umbral)

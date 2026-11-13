@@ -35,7 +35,7 @@ src/tp/
   ingesta/chunking.py       chunking + dataclass Chunk             [CP4 ✅]
   ingesta/embeddings.py     embeddings Gemini (documento/consulta)
   ingesta/pipeline.py       cargar_corpus + pipeline_ingesta       [CP4 ✅]
-  recuperacion/buscador.py  Chroma: indexar + buscar               [CP5 — TODO]
+  recuperacion/buscador.py  Chroma: indexar + buscar               [CP5 ✅]
 scripts/                    descargar_corpus.py, ingestar.py, buscar.py
 tests/                      un archivo por checkpoint
 data/corpus/                corpus: JavaScript Guide de MDN (34 páginas)
@@ -50,7 +50,7 @@ docs/decisiones.md          registro de decisiones técnicas -> base del informe
 | 2 | `LLMClient` con reintentos | ✅ hecho en notebook |
 | 3 | `LLMProvider` + salida estructurada | ✅ `pytest tests/test_cp3_*` |
 | 4 | Ingesta: limpieza, chunking, metadata | ✅ `pytest tests/test_cp4_ingesta.py` |
-| 5 | Índice vectorial + buscador | ⬜ `pytest tests/test_cp5_buscador.py` |
+| 5 | Índice vectorial + buscador | ✅ `pytest tests/test_cp5_buscador.py` + índice real (1118 chunks, umbral 0.6) |
 | 6 | RAG end-to-end con citas | — |
 | 7 | Casos fallidos diagnosticados | — |
 | 8 | Dataset de evaluación + métricas | — |

@@ -10,6 +10,7 @@ __pycache__/
 
 # Datos generados (se reconstruyen con scripts/ingestar.py)
 data/chroma/
+chroma_data/
 
 # Notebooks
 .ipynb_checkpoints/

@@ -41,17 +41,23 @@ def _normalizar(vector: list[float]) -> list[float]:
     return (v / norma).tolist() if norma else v.tolist()
 
 
-def _embeber_lote(client, lote: list[str], config, max_reintentos: int = 3):
-    """Manda una tanda a Google. Si Google está saturado (429) o falla de su lado (5xx), espera y reintenta."""
+def _embeber_lote(client, lote: list[str], config, max_reintentos: int = 5):
+    """Manda una tanda a Google. Si Google está saturado (429) o falla de su lado (5xx), espera y reintenta.
+    El plan gratuito permite 100 textos por minuto: ante un 429 se espera un minuto entero."""
     for intento in range(max_reintentos):
         try:
             return client.models.embed_content(model=settings.google_embedding_model_id,
-                                               contents=lote, config=config)
+                                            contents=lote, config=config)
         except Exception as err:
             codigo = getattr(err, "code", None)
             if codigo not in CODIGOS_REINTENTABLES or intento == max_reintentos - 1:
                 raise
-            time.sleep((2 ** intento) + random.uniform(0, 1))
+            if codigo == 429:
+                espera = 60
+            else:
+                espera = (2 ** intento) + random.uniform(0, 1)
+            print(f"  Google respondió {codigo}; reintento en {espera:.0f} s...")
+            time.sleep(espera)
 
 
 def embed_google(textos: list[str], task_type: str = "RETRIEVAL_DOCUMENT") -> list[list[float]]:

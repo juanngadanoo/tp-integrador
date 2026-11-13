@@ -21,9 +21,19 @@ def abrir_coleccion(ruta=None, nombre=None):
 def indexar(coleccion, registros: list[dict]) -> int:
     """Carga en Chroma la salida de pipeline_ingesta. Devuelve cuántos chunks quedaron indexados.
     Tiene que ser idempotente: correrlo dos veces con los mismos datos NO duplica chunks."""
-    # TODO (vos): usar coleccion.upsert(ids=..., embeddings=..., documents=..., metadatas=...)
-    #   metadatas: al menos documento_id, posicion y fuente.
-    raise NotImplementedError("Checkpoint 5: completá indexar")
+    coleccion.upsert(
+        ids=[r["chunk_id"] for r in registros],
+        embeddings=[r["vector"] for r in registros],
+        documents=[r["texto"] for r in registros],
+        metadatas=[{
+            "documento_id": r["documento_id"],
+            "posicion": r["posicion"],
+            "fuente": r["fuente"],
+            "fecha_ingesta": r.get("fecha_ingesta", ""),
+        } for r in registros],
+    )
+    return coleccion.count()
+
 
 
 def buscar(consulta: str, coleccion, k: int = 3, umbral_similitud: float = 0.0,
@@ -31,9 +41,22 @@ def buscar(consulta: str, coleccion, k: int = 3, umbral_similitud: float = 0.0,
     """Top-k chunks para `consulta`, descartando los que estén por debajo de `umbral_similitud`.
     Devuelve una lista de {chunk_id, texto, similitud, documento_id, posicion, fuente},
     ordenada de mayor a menor similitud."""
-    # TODO (vos):
-    # 1. Embeber la consulta con embed_fn (ya usa RETRIEVAL_QUERY).
-    # 2. coleccion.query(query_embeddings=[...], n_results=k, where=where)
-    # 3. Chroma devuelve DISTANCIA coseno, no similitud: ¿cómo convertís una en la otra?
-    # 4. Filtrar por umbral y armar la lista de dicts.
-    raise NotImplementedError("Checkpoint 5: completá buscar")
+    vector = embed_fn(consulta)
+    res = coleccion.query(query_embeddings=[vector], n_results=k, where=where)
+
+    resultados = []
+    for chunk_id, texto, meta, distancia in zip(
+        res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]
+    ):
+        similitud = 1 - distancia
+        if similitud >= umbral_similitud:
+            resultados.append({
+                "chunk_id": chunk_id,
+                "texto": texto,
+                "similitud": similitud,
+                "documento_id": meta["documento_id"],
+                "posicion": meta["posicion"],
+                "fuente": meta["fuente"],
+            })
+    return resultados
+
