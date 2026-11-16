@@ -35,3 +35,11 @@
 - **Solución**: `ingestar.py` guarda en Chroma después de cada documento y saltea los ya indexados; ante un 429 se espera un minuto.
 - **Consecuencia**: con el plan gratuito, la primera ingesta lleva dos días; si cambia el corpus o el chunking, hay que borrar `data/chroma` y re-ingestar.
 - **Resolución**: con una API key de nivel 2 (tier pago) la ingesta completa entró en una sola corrida; la ingesta incremental queda como protección ante cortes.
+
+## Clase 6 — Pipeline RAG: contexto, umbral y citas
+
+- **Valores**: k=3, umbral de similitud 0.6 (el de la Clase 5), presupuesto de contexto de 2600 caracteres.
+- **Por qué 2600**: cada chunk ocupa ~833 caracteres con el encabezado de fuente; con los 1500 de la notebook entraba uno solo. Con 2600 entran los 3 completos (~650 tokens) y queda como tope si cambia el chunking o k.
+- **Registro**: se busca sin umbral y se filtra después, para registrar todo el top-k con su similitud y distinguir fallas de recuperación de fallas de umbral.
+- **Cómo lo medí**: 4 preguntas sobre el corpus real (2 buenas, 1 ambigua, 1 fuera de dominio). La fuera de dominio dio 0.488 y se frenó sin llamar al modelo. Las citas se validan con regex, incluido el formato `[1, 3]`.
+- **Pendiente (Clase 7)**: async/await recuperó chunks de un resumen general en vez de `using_promises`; el validador puede confundir índices de código (`lista[0]`) con citas.

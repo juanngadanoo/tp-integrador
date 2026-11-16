@@ -20,6 +20,7 @@ python scripts/descargar_corpus.py          # baja el corpus de MDN (una sola ve
 pytest -v                                   # tests de todos los checkpoints
 python scripts/ingestar.py                  # corpus -> índice vectorial
 python scripts/buscar.py "tu pregunta"      # prueba manual del buscador
+python -c "from tp.rag import rag; print(rag('¿Qué es un closure?')['respuesta'])"   # prueba del RAG
 ```
 
 ## Estructura
@@ -36,6 +37,7 @@ src/tp/
   ingesta/embeddings.py     embeddings Gemini (documento/consulta)
   ingesta/pipeline.py       cargar_corpus + pipeline_ingesta       [CP4 ✅]
   recuperacion/buscador.py  Chroma: indexar + buscar               [CP5 ✅]
+  rag.py                    pipeline RAG: umbral, presupuesto, citas  [CP6 ✅]
 scripts/                    descargar_corpus.py, ingestar.py, buscar.py
 tests/                      un archivo por checkpoint
 data/corpus/                corpus: JavaScript Guide de MDN (34 páginas)
@@ -51,7 +53,7 @@ docs/decisiones.md          registro de decisiones técnicas -> base del informe
 | 3 | `LLMProvider` + salida estructurada | ✅ `pytest tests/test_cp3_*` |
 | 4 | Ingesta: limpieza, chunking, metadata | ✅ `pytest tests/test_cp4_ingesta.py` |
 | 5 | Índice vectorial + buscador | ✅ `pytest tests/test_cp5_buscador.py` + índice real (1118 chunks, umbral 0.6) |
-| 6 | RAG end-to-end con citas | — |
+| 6 | RAG end-to-end con citas | ✅ `src/tp/rag.py` + `notebooks_clases/clase-06.ipynb` (k=3, umbral 0.6, presupuesto 2600) |
 | 7 | Casos fallidos diagnosticados | — |
 | 8 | Dataset de evaluación + métricas | — |
 | 9 | Herramienta externa con tool calling | — |
